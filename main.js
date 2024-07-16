@@ -5,13 +5,18 @@ const todoInput = document.querySelector(".todo-input");
 const todoForm = document.querySelector(".todo-form");
 const todoList = document.querySelector(".todolist");
 
+const todoFilter = document.querySelector(".filter-todos");
+
 // event
 todoForm.addEventListener("submit", addNewTodo);
-
+todoFilter.addEventListener("change", filterTodo);
 // function
 
 function addNewTodo(e) {
   e.preventDefault();
+
+  if (!todoInput.value) return null
+
   const newTodo = {
     id: Date.now(),
     createdAt: new Date().toISOString(),
@@ -48,4 +53,29 @@ function removeTodos(e) {
   const todoId = Number(e.target.dataset.todoId);
   todos = todos.filter((todo) => todo.id !== todoId);
   createTodo(todos);
+}
+
+// todo filter
+
+function filterTodo(e) {
+  const filter = e.target.value;
+
+  switch (filter) {
+    case "all": {
+      createTodo(todos);
+      break;
+    }
+    case "completed": {
+      const filter = todos.filter((todo) => todo.completed);
+      createTodo(filter);
+      break;
+    }
+    case "uncomplated": {
+      const filter = todos.filter((todo) => !todo.completed);
+      createTodo(filter);
+      break;
+    }
+    default:
+      createTodo(todos);
+  }
 }
